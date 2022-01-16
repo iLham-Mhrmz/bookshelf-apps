@@ -10,7 +10,6 @@ function displayBook() {
       );
     });
   }
-  console.log(books);
 }
 
 function createBookShelf(id, title, author, year, inputIsComplete) {
@@ -98,7 +97,6 @@ function addBook() {
       books[bookIndex].isComplete = inputIsComplete;
     }
 
-    console.log(books[bookIndex]);
     let complete = document.getElementById("completeBookshelfList");
     let incomplete = document.getElementById("incompleteBookshelfList");
     complete.innerHTML = "";
@@ -106,6 +104,7 @@ function addBook() {
 
     saveBookData();
     loadBookFromStorage();
+    window.alert("Data buku berhasil diubah!")
   }
   updateBookDataToStorage();
 }
@@ -116,7 +115,6 @@ function editBook(id) {
 
   const bookIndex = books.findIndex((obj) => obj.id == id);
   bookItem = books[bookIndex];
-  console.log(bookItem);
   const inputTitle = document.getElementById("inputBookTitle");
   inputTitle.value = `${bookItem.title}`;
   const inputAuthor = document.getElementById("inputBookAuthor");

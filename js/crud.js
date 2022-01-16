@@ -1,6 +1,7 @@
 const STORAGE_KEY = "BOOKSHELF_APPS";
 
 let books = [];
+let bookItem = [];
 
 function storageCheck() /* boolean */ {
   if (typeof Storage === undefined) {
@@ -23,6 +24,7 @@ function loadBookFromStorage() {
 
   if (booksData !== null) books = booksData;
   document.dispatchEvent(new Event("ondataload"));
+  document.getElementById("inputBook").reset();
   displayBook()
 }
 
@@ -30,9 +32,9 @@ function updateBookDataToStorage() {
   if (storageCheck()) saveBookData();
 }
 
-function createBookObject(title, author, year, isComplete) {
+function createBookObject(id, title, author, year, isComplete) {
   return {
-    id: +new Date(),
+    id,
     title,
     author,
     year,
@@ -66,6 +68,7 @@ function deleteBook(id){
   complete.innerHTML = '';
   incomplete.innerHTML = '';
   books = newBooks;
+  bookItem = []
   saveBookData()
   loadBookFromStorage();
 }

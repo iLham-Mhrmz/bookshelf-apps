@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 document.addEventListener("change", function () {
   let completion = document.getElementsByTagName("span");
+
   if (document.getElementById("inputBookIsComplete").checked) {
     completion[0].innerText = "Sudah selesai dibaca";
   } else completion[0].innerText = "Belum selesai dibaca";

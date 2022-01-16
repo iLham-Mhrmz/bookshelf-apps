@@ -1,14 +1,19 @@
-function displayBook(){
-    if (books.length !== 0){
-        books.forEach(book => {
-            createBookShelf(book.id,book.title, book.author, book.year, book.isComplete)
-        })
-    }
-    console.log(books)
+function displayBook() {
+  if (books.length !== 0) {
+    books.forEach((book) => {
+      createBookShelf(
+        book.id,
+        book.title,
+        book.author,
+        book.year,
+        book.isComplete
+      );
+    });
+  }
+  console.log(books);
 }
 
 function createBookShelf(id, title, author, year, inputIsComplete) {
-
   const textTitle = document.createElement("h3");
   textTitle.innerText = title;
 
@@ -22,7 +27,7 @@ function createBookShelf(id, title, author, year, inputIsComplete) {
 
   const btnRead = document.createElement("button");
   btnRead.classList.add("green");
-  btnRead.setAttribute("onclick",  `changeComplete(${id})`);
+  btnRead.setAttribute("onclick", `changeComplete(${id})`);
 
   if (isComplete === false) {
     btnRead.innerText = "Selesai dibaca";
@@ -30,12 +35,12 @@ function createBookShelf(id, title, author, year, inputIsComplete) {
 
   const btnEdit = document.createElement("button");
   btnEdit.classList.add("blue");
-  btnEdit.setAttribute("onclick", `editBook(${id})` )
+  btnEdit.setAttribute("onclick", `editBook(${id})`);
   btnEdit.innerText = "Edit buku";
 
   const btnDelete = document.createElement("button");
   btnDelete.classList.add("red");
-  btnDelete.setAttribute("onclick",  `deleteBook(${id})`);
+  btnDelete.setAttribute("onclick", `deleteBook(${id})`);
   btnDelete.innerText = "hapus Buku";
 
   const btnContainer = document.createElement("div");
@@ -53,7 +58,6 @@ function createBookShelf(id, title, author, year, inputIsComplete) {
 }
 
 function addBook() {
-
   const inputTitle = document.getElementById("inputBookTitle").value;
   const inputAuthor = document.getElementById("inputBookAuthor").value;
   const inputBookYear = parseInt(
@@ -65,22 +69,62 @@ function addBook() {
     inputIsComplete = true;
   }
 
-  const bookObject = createBookObject(
-    inputTitle,
-    inputAuthor,
-    inputBookYear,
-    inputIsComplete
-  );
+  if (bookItem.length === 0) {
+    let id = +new Date();
 
-  createBookShelf(
-    bookObject.id,
-    inputTitle,
-    inputAuthor,
-    inputBookYear,
-    inputIsComplete
-  );
+    const bookObject = createBookObject(
+      id,
+      inputTitle,
+      inputAuthor,
+      inputBookYear,
+      inputIsComplete
+    );
 
-  books.push(bookObject);
+    createBookShelf(
+      bookObject.id,
+      inputTitle,
+      inputAuthor,
+      inputBookYear,
+      inputIsComplete
+    );
 
+    books.push(bookObject);
+  } else {
+    const bookIndex = books.findIndex((obj) => obj.id == bookItem.id);
+    if (bookItem) {
+      books[bookIndex].title = inputTitle;
+      books[bookIndex].author = inputAuthor;
+      books[bookIndex].year = inputBookYear;
+      books[bookIndex].isComplete = inputIsComplete;
+    }
+
+    console.log(books[bookIndex]);
+    let complete = document.getElementById("completeBookshelfList");
+    let incomplete = document.getElementById("incompleteBookshelfList");
+    complete.innerHTML = "";
+    incomplete.innerHTML = "";
+
+    saveBookData();
+    loadBookFromStorage();
+  }
   updateBookDataToStorage();
+}
+
+function editBook(id) {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+
+  const bookIndex = books.findIndex((obj) => obj.id == id);
+  bookItem = books[bookIndex];
+  console.log(bookItem);
+  const inputTitle = document.getElementById("inputBookTitle");
+  inputTitle.value = `${bookItem.title}`;
+  const inputAuthor = document.getElementById("inputBookAuthor");
+  inputAuthor.value = `${bookItem.author}`;
+  const inputBookYear = document.getElementById("inputBookYear");
+  inputBookYear.value = `${parseInt(bookItem.year)}`;
+
+  if (bookItem.isComplete == true) {
+    document.getElementById("inputBookIsComplete").checked = true;
+  }
 }

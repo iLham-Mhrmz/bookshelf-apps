@@ -25,7 +25,7 @@ function loadBookFromStorage() {
   if (booksData !== null) books = booksData;
   document.dispatchEvent(new Event("ondataload"));
   document.getElementById("inputBook").reset();
-  displayBook()
+  displayBook();
 }
 
 function updateBookDataToStorage() {
@@ -42,33 +42,39 @@ function createBookObject(id, title, author, year, isComplete) {
   };
 }
 
-function changeComplete(id){
-  const bookIndex = books.findIndex(obj => obj.id == id);
-  if (books[bookIndex].isComplete == false){
-    books[bookIndex].isComplete = true
-  } else books[bookIndex].isComplete = false
+function changeComplete(id) {
+  const bookIndex = books.findIndex((obj) => obj.id == id);
+  if (books[bookIndex].isComplete == false) {
+    books[bookIndex].isComplete = true;
+  } else books[bookIndex].isComplete = false;
 
   let complete = document.getElementById("completeBookshelfList");
   let incomplete = document.getElementById("incompleteBookshelfList");
 
-  complete.innerHTML = '';
-  incomplete.innerHTML = '';
+  complete.innerHTML = "";
+  incomplete.innerHTML = "";
 
-  saveBookData()
+  saveBookData();
   loadBookFromStorage();
-
 }
 
-function deleteBook(id){
-  let newBooks = books.filter(x => x.id !== id);
+function deleteBook(id) {
+  let confirm = window.confirm("Apakah anda yakin untuk menghapus buku ini?");
 
-  let complete = document.getElementById("completeBookshelfList");
-  let incomplete = document.getElementById("incompleteBookshelfList");
+  if (confirm == true) {
+    let newBooks = books.filter((x) => x.id !== id);
 
-  complete.innerHTML = '';
-  incomplete.innerHTML = '';
-  books = newBooks;
-  bookItem = []
-  saveBookData()
-  loadBookFromStorage();
+    let complete = document.getElementById("completeBookshelfList");
+    let incomplete = document.getElementById("incompleteBookshelfList");
+
+    complete.innerHTML = "";
+    incomplete.innerHTML = "";
+    books = newBooks;
+    bookItem = [];
+    saveBookData();
+    loadBookFromStorage();
+    window.alert("Data buku berhasil dihapus!")
+  } else {
+    return 0
+  }
 }

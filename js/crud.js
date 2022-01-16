@@ -42,20 +42,75 @@ function createBookObject(id, title, author, year, isComplete) {
   };
 }
 
-function changeComplete(id) {
+function addBook() {
+  const inputTitle = document.getElementById("inputBookTitle").value;
+  const inputAuthor = document.getElementById("inputBookAuthor").value;
+  const inputBookYear = parseInt(
+    document.getElementById("inputBookYear").value
+  );
+
+  let inputIsComplete = false;
+  if (document.getElementById("inputBookIsComplete").checked) {
+    inputIsComplete = true;
+  }
+
+  if (bookItem.length === 0) {
+    let id = +new Date();
+
+    const bookObject = createBookObject(
+      id,
+      inputTitle,
+      inputAuthor,
+      inputBookYear,
+      inputIsComplete
+    );
+
+    createBookShelf(
+      bookObject.id,
+      inputTitle,
+      inputAuthor,
+      inputBookYear,
+      inputIsComplete
+    );
+
+    books.push(bookObject);
+  } else {
+    const bookIndex = books.findIndex((obj) => obj.id == bookItem.id);
+    if (bookItem) {
+      books[bookIndex].title = inputTitle;
+      books[bookIndex].author = inputAuthor;
+      books[bookIndex].year = inputBookYear;
+      books[bookIndex].isComplete = inputIsComplete;
+    }
+
+    let complete = document.getElementById("completeBookshelfList");
+    let incomplete = document.getElementById("incompleteBookshelfList");
+    complete.innerHTML = "";
+    incomplete.innerHTML = "";
+
+    saveBookData();
+    loadBookFromStorage();
+    window.alert("Data buku berhasil diubah!");
+  }
+  updateBookDataToStorage();
+}
+
+function editBook(id) {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+
   const bookIndex = books.findIndex((obj) => obj.id == id);
-  if (books[bookIndex].isComplete == false) {
-    books[bookIndex].isComplete = true;
-  } else books[bookIndex].isComplete = false;
+  bookItem = books[bookIndex];
+  const inputTitle = document.getElementById("inputBookTitle");
+  inputTitle.value = `${bookItem.title}`;
+  const inputAuthor = document.getElementById("inputBookAuthor");
+  inputAuthor.value = `${bookItem.author}`;
+  const inputBookYear = document.getElementById("inputBookYear");
+  inputBookYear.value = `${parseInt(bookItem.year)}`;
 
-  let complete = document.getElementById("completeBookshelfList");
-  let incomplete = document.getElementById("incompleteBookshelfList");
-
-  complete.innerHTML = "";
-  incomplete.innerHTML = "";
-
-  saveBookData();
-  loadBookFromStorage();
+  if (bookItem.isComplete == true) {
+    document.getElementById("inputBookIsComplete").checked = true;
+  }
 }
 
 function deleteBook(id) {
@@ -73,8 +128,8 @@ function deleteBook(id) {
     bookItem = [];
     saveBookData();
     loadBookFromStorage();
-    window.alert("Data buku berhasil dihapus!")
+    window.alert("Data buku berhasil dihapus!");
   } else {
-    return 0
+    return 0;
   }
 }
